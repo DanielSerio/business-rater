@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "app/generated/prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ImageFileExtension {
+  JPG
+  PNG
+  SVG
+}
+
+model Image {
+  id           Int                @id @default(autoincrement())
+  uploadedById String
+  aspect       Float
+  path         String
+  filename     String
+  extension    ImageFileExtension
+
+  UploadedBy      User       @relation(fields: [uploadedById], references: [id])
+  ProfileAccount  Account[]
+  ProfileBusiness Business[]
+}
+
+model User {
+  id           String           @id @default(uuid())
+  email        String           @unique
+  hash         String
+  isVerified   Boolean          @default(false)
+  role         Role             @default(USER)
+  Permissions  UserPermission[]
+  refreshToken String           @default("INITIAL")
+  Account      Account?
+  ImageUploads Image[]
+}
+
+model UserPermission {
+  id          Int    @default(autoincrement())
+  userId      String
+  accessLevel Int    @default(2)
+  scope       String
+  User        User   @relation(fields: [userId], references: [id])
+
+  @@id([id, userId])
+}
+
+model Account {
+  id             String              @id
+  email          String              @unique
+  username       String?             @unique
+  profileImageId Int?
+  User           User                @relation(fields: [id], references: [id])
+  ProfileImage   Image?              @relation(fields: [profileImageId], references: [id])
+  Favorites      FavoritedBusiness[]
+  Ratings        Rating[]
+}
+
+model ExpiredRefreshToken {
+  id      Int      @id @default(autoincrement())
+  savedAt DateTime @default(now())
+  token   String
+}
+
+model Country {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  name String @unique
+
+  Provinces Province[]
+}
+
+model Province {
+  id        Int    @id @default(autoincrement())
+  code      String @unique
+  name      String @unique
+  countryId Int
+
+  Country Country @relation(fields: [countryId], references: [id])
+  Cities  City[]
+}
+
+model City {
+  id         Int    @id @default(autoincrement())
+  code       String @unique
+  name       String @unique
+  provinceId Int
+
+  Province   Province   @relation(fields: [provinceId], references: [id])
+  Businesses Business[]
+  Address    Address[]
+}
+
+model Business {
+  id             Int     @id @default(autoincrement())
+  name           String  @unique
+  description    String?
+  profileImageId Int?
+  websiteUrl     String?
+  cityId         Int
+
+  City            City                @relation(fields: [cityId], references: [id])
+  Favorites       FavoritedBusiness[]
+  Ratings         Rating[]
+  Address         BusinessAddress?
+  BusinessDetails BusinessDetails?
+  ProfileImage    Image?              @relation(fields: [profileImageId], references: [id])
+}
+
+model BusinessDetails {
+  id       Int      @id
+  Business Business @relation(fields: [id], references: [id])
+}
+
+model FavoritedBusiness {
+  businessId Int
+  accountId  String
+
+  Business Business @relation(fields: [businessId], references: [id])
+  Account  Account  @relation(fields: [accountId], references: [id])
+
+  @@id([businessId, accountId])
+}
+
+model Rating {
+  id             Int      @id @default(autoincrement())
+  businessId     Int
+  accountId      String
+  parentRatingId Int
+  createdAt      DateTime @default(now())
+
+  atmosphereRating Int?
+  serviceRating    Int?
+  speedRating      Int?
+  catalogRating    Int?
+  priceRating      Int?
+
+  atmosphereNote String?
+  serviceNote    String?
+  speedNote      String?
+  catalogNote    String?
+  priceNote      String?
+  overallNote    String?
+
+  Business Business @relation(fields: [businessId], references: [id])
+  Account  Account  @relation(fields: [accountId], references: [id])
+  Parent   Rating?  @relation("Children", fields: [parentRatingId], references: [id])
+  Children Rating[] @relation("Children")
+}
+
+model Address {
+  id           Int     @id @default(autoincrement())
+  cityId       Int
+  contact      String?
+  organization String?
+  lineOne      String?
+  lineTwo      String?
+  lineThree    String?
+  suite        String?
+  postal       String?
+
+  lat Float?
+  lng Float?
+
+  City            City?            @relation(fields: [cityId], references: [id])
+  BusinessAddress BusinessAddress?
+}
+
+model BusinessAddress {
+  businessId Int @unique
+  addressId  Int @unique
+
+  Business Business @relation(fields: [businessId], references: [id])
+  Address  Address  @relation(fields: [addressId], references: [id])
+
+  @@id([businessId, addressId])
+}
