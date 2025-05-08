@@ -1,7 +1,7 @@
 import { AppShell } from "@mantine/core";
 import { createRootRoute, Outlet, useLocation } from "@tanstack/react-router";
-import { PublicHeader } from "../modules/Core/components/layout/PublicHeader";
-import { ProtectedHeader } from "../modules/Core/components/layout/ProtectedHeader";
+import { PublicHeader } from "../modules/Core/components/layout/Header/PublicHeader";
+import { ProtectedHeader } from "../modules/Core/components/layout/Header/ProtectedHeader";
 
 function isPublicRoute(path: string) {
   const publicRoutes = ["/", "/auth/login"];
@@ -15,7 +15,7 @@ export const Route = createRootRoute({
     const isPublic = isPublicRoute(location.pathname);
 
     return (
-      <AppShell>
+      <AppShell header={{ height: 60 }}>
         {!!isPublic ? <PublicHeader /> : <ProtectedHeader />}
         <Outlet />
       </AppShell>

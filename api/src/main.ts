@@ -11,10 +11,22 @@ async function bootstrap() {
     origin: [
       'http://localhost:5173'
     ],
-    allowedHeaders: [
+    exposedHeaders: [
+      'x-powered-by',
+      'access-control-allow-origin',
+      'content-type',
       'authorization',
       'x-authorization',
-      'x-refresh'
+      'x-refresh',
+      'refresh'
+    ],
+    allowedHeaders: [
+      'access-control-allow-origin',
+      'content-type',
+      'x-authorization',
+      'x-refresh',
+      'authorization',
+      'refresh'
     ]
   });
 

@@ -1,0 +1,23 @@
+.auth-form {
+  width: 100%;
+  max-width: 320px;
+
+  .mantine-Text-root {
+    font-size: 0.8em;
+
+    button {
+      border: none;
+      padding: 0;
+      margin: 0;
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--mantine-color-anchor);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

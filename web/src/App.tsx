@@ -5,14 +5,18 @@ import { QUERY_CLIENT, THEME } from "./const";
 import type { PropsWithChildren } from "react";
 import { RouterProvider } from "@tanstack/react-router";
 import { router } from "./main";
+import { ApiClientProvider } from "./modules/Core/hooks/useApiClient";
+import { AuthProvider } from "./modules/Core/hooks/useAuth";
 
 function AppProviders({ children }: PropsWithChildren) {
   return (
-    <MantineProvider theme={THEME}>
-      <QueryClientProvider client={QUERY_CLIENT}>
-        {children}
-      </QueryClientProvider>
-    </MantineProvider>
+    <ApiClientProvider>
+      <MantineProvider theme={THEME}>
+        <QueryClientProvider client={QUERY_CLIENT}>
+          <AuthProvider>{children}</AuthProvider>
+        </QueryClientProvider>
+      </MantineProvider>
+    </ApiClientProvider>
   );
 }
 

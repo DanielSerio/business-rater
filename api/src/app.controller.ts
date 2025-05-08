@@ -28,11 +28,6 @@ export class AppController {
     const parsed = this._schema.login.parse(body);
     const tokens = await this.authService.login(parsed);
 
-    console.info({
-      parsed,
-      tokens
-    });
-
     res.setHeaders(
       new Map([
         ['x-authorization', `Bearer ${tokens.accessToken}`],
@@ -40,10 +35,14 @@ export class AppController {
       ])
     );
 
-    return res.status(204).send();
+    console.info({
+      res: res
+    });
+
+
+    return res.status(200).send();
   }
 
-  @HttpCode(204)
   @Get('auth/logout')
   async logout(@Body() body: object, @Headers('authorization') authorization: string | null) {
     const rt = (body as { refreshToken: string; }).refreshToken;
@@ -98,7 +97,7 @@ export class AppController {
         ])
       );
 
-      return res.status(204).send();
+      return res.status(200).send();
     } catch {
       throw new ForbiddenException();
     }
