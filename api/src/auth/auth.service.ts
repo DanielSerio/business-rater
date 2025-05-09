@@ -115,10 +115,12 @@ export class AuthService {
   async refresh(id: string, token: string) {
     const user = await this.getUser({ id });
     const isExpired = await this.isTokenExpired(token);
-    const verified = await this.jwtService.verify(token);
+    const verified = await this.jwtService.verify(token, {
+      secret: this.REFRESH_SECRET
+    });
 
     if (!verified || isExpired) {
-      throw new ForbiddenException();
+      throw new ForbiddenException(`Not verified or token is expired`);
     }
 
     const data = user!;

@@ -12,7 +12,6 @@ async function bootstrap() {
       'http://localhost:5173'
     ],
     exposedHeaders: [
-      'x-powered-by',
       'access-control-allow-origin',
       'content-type',
       'authorization',

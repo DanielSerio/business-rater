@@ -1,9 +1,11 @@
 import { createContext, useContext, type PropsWithChildren } from "react";
-import { http } from "../../../const";
+import { getHttp } from "../../../const";
+import type { AxiosInstance } from "axios";
 
-const ApiClientContext = createContext(http);
+const ApiClientContext = createContext<AxiosInstance>(getHttp());
 
 export const ApiClientProvider = ({ children }: PropsWithChildren) => {
+  const http = getHttp();
   return (
     <ApiClientContext.Provider value={http}>
       {children}

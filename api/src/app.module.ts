@@ -3,9 +3,11 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './auth/guards/jwt.guard';
 import { AppController } from './app.controller';
-import { RefreshGuard } from './auth/guards/refresh.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { BusinessesModule } from './businesses/businesses.module';
+import { RefreshGuard } from './auth/guards/refresh.guard';
+
 
 @Module({
   imports: [
@@ -16,7 +18,9 @@ import { ConfigModule } from '@nestjs/config';
         '.env.development.local'
       ]
     }),
-    AuthModule
+    AuthModule,
+    BusinessesModule,
+
   ],
   controllers: [AppController],
   providers: [
@@ -25,7 +29,7 @@ import { ConfigModule } from '@nestjs/config';
       provide: APP_GUARD,
       useClass: JwtGuard,
     },
-    //  RefreshGuard
+    RefreshGuard
   ],
 })
 export class AppModule { }

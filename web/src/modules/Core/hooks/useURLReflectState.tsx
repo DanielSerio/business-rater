@@ -26,13 +26,17 @@ function mergeSearchParams(params1: URLSearchParams, params2: URLSearchParams) {
   const more = params1 === less ? params2 : params1;
 
   for (const [key, value] of less.entries()) {
-    if (
-      more.get(key) &&
-      (value === null || value == undefined || value === "")
-    ) {
-      more.delete(key);
-    } else if (!more.get(key)) {
-      more.set(key, value);
+    if (params2.has(key) && params1.has(key) && params1 === more) {
+      more.set(key, params2.get(key) ?? "");
+    } else {
+      if (
+        more.get(key) &&
+        (value === null || value == undefined || value === "")
+      ) {
+        more.delete(key);
+      } else if (!more.get(key)) {
+        more.set(key, value);
+      }
     }
   }
 
@@ -40,7 +44,8 @@ function mergeSearchParams(params1: URLSearchParams, params2: URLSearchParams) {
 }
 
 export function useUrlReflectState<State extends RawObject>(
-  state?: State | null
+  state?: State | null,
+  deps?: any[]
 ) {
   const routerState = useRouterState();
 
@@ -87,5 +92,5 @@ export function useUrlReflectState<State extends RawObject>(
         window.history.replaceState({}, "", newUrl);
       }
     }
-  }, [serial]);
+  }, [serial, ...(deps ?? [])]);
 }

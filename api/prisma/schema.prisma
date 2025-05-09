@@ -74,7 +74,7 @@ model Account {
 model ExpiredRefreshToken {
   id      Int      @id @default(autoincrement())
   savedAt DateTime @default(now())
-  token   String
+  token   String   @db.Text
 }
 
 model Country {

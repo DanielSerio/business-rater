@@ -14,7 +14,7 @@ export class RefreshGuard implements CanActivate {
     context: ExecutionContext,
   ): Promise<boolean> {
     const request = await this.getRequest(context);
-    const body = await request.json();
+    const body = await request.body as any;
     const auth = request.headers['authorization'];
     const accessToken = (auth ?? '').replace(/^bearer\s+/i, '');
 
@@ -24,6 +24,7 @@ export class RefreshGuard implements CanActivate {
 
     const decoded = jwtDecode(accessToken);
 
-    return !!body.refreshToken && decoded.sub === body.refreshToken;
+
+    return !!body.refreshToken && decoded.sub === jwtDecode(body.refreshToken).sub;
   }
 }

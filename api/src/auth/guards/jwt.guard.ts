@@ -1,12 +1,21 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class JwtGuard implements CanActivate {
-  constructor(private reflector: Reflector, private jwtService: JwtService) { }
+  SESSION_SECRET = '';
+
+  constructor(
+    config: ConfigService,
+    private reflector: Reflector,
+    private jwtService: JwtService
+  ) {
+    this.SESSION_SECRET = config.get('JWT_SESSION_SECRET')!;
+  }
 
   private getRequest = (context: ExecutionContext) => {
     return context.switchToHttp().getRequest() as Request;
@@ -20,7 +29,7 @@ export class JwtGuard implements CanActivate {
   };
 
   private isValidJWT(token: string) {
-    return this.jwtService.verify(token);
+    return this.jwtService.verify(token, { secret: this.SESSION_SECRET, });
   }
 
   async canActivate(
@@ -38,6 +47,12 @@ export class JwtGuard implements CanActivate {
       return false;
     }
 
-    return this.isValidJWT(accessToken);
+    try {
+      this.isValidJWT(accessToken);
+    } catch (err) {
+      throw new UnauthorizedException();
+    }
+
+    return true;
   }
 }

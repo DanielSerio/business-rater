@@ -30,7 +30,7 @@ function BusinessSearchComponent(
     retry: false,
     async queryFn() {
       const response = await http.get(
-        `/business?search=${encodeURIComponent(searchQuery)}`
+        `/businesses?search=${encodeURIComponent(searchQuery)}`
       );
 
       const items = await response.data;

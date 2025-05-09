@@ -18,10 +18,12 @@ import {
   TbMenu2,
   TbShield,
 } from "react-icons/tb";
+import { useNavigate } from "@tanstack/react-router";
 
 export function ProtectedHeader() {
   const auth = useAuth()!;
   const img = useProfileImg(auth?.img);
+  const navigate = useNavigate();
 
   return (
     <AppShellHeader h={60}>
@@ -49,6 +51,7 @@ export function ProtectedHeader() {
                     variant="subtle"
                     color="orange"
                     rightSection={<TbShield />}
+                    onClick={() => navigate({ to: "/admin" })}
                   >
                     <Text>Admin Dashboard</Text>
                   </Menu.Item>

@@ -7,6 +7,7 @@ import { Public } from './auth/decorators/public.decorator';
 import { RefreshGuard } from './auth/guards/refresh.guard';
 import { jwtDecode } from 'jwt-decode';
 
+
 @Controller()
 export class AppController {
   private _schema = {
@@ -84,11 +85,17 @@ export class AppController {
       const parsed = this._schema.refresh.parse(body);
       const token = (authorization ?? '').replace(/bearer\s+/i, '');
 
+      console.info({
+        body,
+        token
+      });
+
       if (!token) {
         throw new ForbiddenException();
       }
 
-      const tokens = await this.authService.refresh(token, parsed.refreshToken);
+      const id = jwtDecode(token)?.sub;
+      const tokens = await this.authService.refresh(id!, parsed.refreshToken);
 
       res.setHeaders(
         new Map([
@@ -98,8 +105,9 @@ export class AppController {
       );
 
       return res.status(200).send();
-    } catch {
-      throw new ForbiddenException();
+    } catch (error) {
+      console.error('thrown error', error);
+      throw new ForbiddenException(`Problem with payload`);
     }
   }
 
