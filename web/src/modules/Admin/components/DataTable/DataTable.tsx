@@ -50,7 +50,7 @@ export function DataTable<Name extends AdminTabName>({
   });
 
   const [
-    { query, total, sorting, columnFilters },
+    { query, total, sorting, columnFilters, limit, offset },
     { setSorting, setColumnFilters },
   ] = tableQueryController;
 
@@ -72,7 +72,14 @@ export function DataTable<Name extends AdminTabName>({
 
   const gridProfile = getGridProfile(columns);
 
-  useUrlReflectState({ tab: entity }, [entity]);
+  useUrlReflectState(
+    {
+      tab: entity,
+      limit: typeof limit === "number" ? `${limit}` : null,
+      offset: typeof offset === "number" ? `${offset}` : null,
+    },
+    [entity, limit, offset]
+  );
 
   return (
     <div className={`data-table ${entity}`}>

@@ -13,8 +13,8 @@ import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 /**
  * Returns a number based on the input value or a fallback value if the input is not a valid number.
  */
-function getDefaultNumber(value?: string, minValue = 1, fallback = 1) {
-  if (value && !!value.trim()) {
+function getDefaultNumber(value?: string | number, minValue = 1, fallback = 1) {
+  if ((value || value === 0) && !!`${value}`.trim()) {
     const isNumber = !isNaN(Number(value));
 
     if (isNumber) {
@@ -87,11 +87,19 @@ export function useDataTableQuery<Name extends AdminTabName>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const [total, setTotal] = useState(0);
-  const [limit, setLimit] = useState(
+  const [limit, _setLimit] = useState(
     getDefault("limit", searchQuery.limit) as number
   );
   const [offset, setOffset] = useState(
     getDefault("offset", searchQuery.offset) as number
+  );
+
+  const setLimit = useCallback(
+    (value: number) => {
+      setOffset(0);
+      _setLimit(value);
+    },
+    [_setLimit, setOffset]
   );
 
   const goToFirstPage = () => {
