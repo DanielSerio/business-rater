@@ -3,6 +3,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table";
+import { Box, Skeleton } from "@mantine/core";
 import type { AdminTabName } from "../../../../pages/admin/AdminDashboardPage";
 import { useUrlReflectState } from "../../../Core/hooks/useURLReflectState";
 import {
@@ -16,7 +17,13 @@ import { useApiClient } from "../../../Core/hooks/useApiClient";
 import { DataTableHeader } from "./DataTableHeader";
 import { useDataTableQuery } from "./hooks/useDataTableQuery";
 import { getGridProfile } from "./utilities/get-grid-profile";
+import { DataTableRow } from "./DataTableRow";
+import { DataTableCol } from "./DataTableCol";
 
+/**
+ * Convenience function to get the column list. Without this,
+ * this file would likely become gigantic.
+ */
 function getDataTableColumns<Name extends AdminTabName>(
   name: Name
 ): ColumnDef<DataTableEntity<Name>>[] {
@@ -34,7 +41,9 @@ function getDataTableColumns<Name extends AdminTabName>(
   }
 }
 
-const initialValues: any[] = [];
+// Tanstack table suggests creating an empty initial value outside of
+// component scope
+const initialValues: unknown[] = [];
 
 export function DataTable<Name extends AdminTabName>({
   entity,
@@ -70,8 +79,13 @@ export function DataTable<Name extends AdminTabName>({
     onColumnFiltersChange: setColumnFilters,
   });
 
+  // percent-based grid-template-columns to be used on table rows
   const gridProfile = getGridProfile(columns);
 
+  /**
+   * Reflect the current state of the page in the url. This allows for
+   * bookmarking/sharing of sorted & filtered views
+   */
   useUrlReflectState(
     {
       tab: entity,
@@ -89,6 +103,17 @@ export function DataTable<Name extends AdminTabName>({
           controller={tableQueryController}
           gridProfile={gridProfile}
         />
+        {[...new Array(limit)].map((_, rowIndex) => (
+          <DataTableRow gridProfile={gridProfile} key={`r-${rowIndex}`}>
+            {columns.map(({ id }, index) => (
+              <DataTableCol key={id ?? `c-${index}`}>
+                <Box p="xs">
+                  <Skeleton w="100%" h={12} />
+                </Box>
+              </DataTableCol>
+            ))}
+          </DataTableRow>
+        ))}
       </div>
     </div>
   );

@@ -48,48 +48,51 @@ export function useUrlReflectState<State extends RawObject>(
   deps?: any[]
 ) {
   const routerState = useRouterState();
-
   const serial = JSON.stringify(state);
 
   useEffect(() => {
-    const siteUrl =
-      routerState.resolvedLocation?.href || routerState.location.href;
-    const url = new URL(`${window.location.origin}${siteUrl}`);
+    const siteUrl = routerState.resolvedLocation?.href;
+    let nextUrl: string | null = siteUrl ?? null;
 
-    const existingSearchParams = getExistingSearchParams(url.search);
-    const createdSearchParams = createSearchParams(state);
-    const origin = `${siteUrl}`.split("?")[0];
+    if (routerState.status === "pending" && routerState.pendingMatches) {
+      const firstMatch = routerState.pendingMatches![1]; // skip __root__ at 0 index
 
-    console.info("State changed", serial, {
-      existingSearchParams: existingSearchParams?.toString(),
-      createdSearchParams: createdSearchParams?.toString(),
-    });
-
-    if (existingSearchParams && createdSearchParams) {
-      const merged = mergeSearchParams(
-        existingSearchParams,
-        createdSearchParams
-      );
-
-      const newUrl = `${origin}?${merged.toString()}`;
-
-      if (newUrl !== siteUrl) {
-        console.log("query merged: ", newUrl);
-        window.history.replaceState({}, "", newUrl);
+      if (firstMatch) {
+        nextUrl = firstMatch.id;
       }
-    } else if (createdSearchParams?.toString()) {
-      const newUrl = `${origin}?${createdSearchParams.toString()}`;
+    } else if (routerState.status === "idle" && nextUrl) {
+      const url = new URL(`${window.location.origin}${nextUrl}`);
 
-      if (newUrl !== siteUrl) {
-        console.log("query created: ", createdSearchParams);
-        window.history.replaceState({}, "", newUrl);
-      }
-    } else if (existingSearchParams?.toString()) {
-      const newUrl = `${origin}?${existingSearchParams.toString()}`;
+      const existingSearchParams = getExistingSearchParams(url.search);
+      const createdSearchParams = createSearchParams(state);
+      const origin = `${nextUrl}`.split("?")[0];
 
-      if (newUrl !== siteUrl) {
-        console.log("query existing: ", existingSearchParams);
-        window.history.replaceState({}, "", newUrl);
+      if (existingSearchParams && createdSearchParams) {
+        const merged = mergeSearchParams(
+          existingSearchParams,
+          createdSearchParams
+        );
+
+        const newUrl = `${origin}?${merged.toString()}`;
+
+        if (newUrl !== siteUrl) {
+          console.log("query merged: ", newUrl);
+          window.history.replaceState({}, "", newUrl);
+        }
+      } else if (createdSearchParams?.toString()) {
+        const newUrl = `${origin}?${createdSearchParams.toString()}`;
+
+        if (newUrl !== siteUrl) {
+          console.log("query created: ", createdSearchParams);
+          window.history.replaceState({}, "", newUrl);
+        }
+      } else if (existingSearchParams?.toString()) {
+        const newUrl = `${origin}?${existingSearchParams.toString()}`;
+
+        if (newUrl !== siteUrl) {
+          console.log("query existing: ", existingSearchParams);
+          window.history.replaceState({}, "", newUrl);
+        }
       }
     }
   }, [serial, ...(deps ?? [])]);
