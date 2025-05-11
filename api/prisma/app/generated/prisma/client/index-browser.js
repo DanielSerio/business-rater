@@ -173,7 +173,6 @@ exports.Prisma.ProvinceScalarFieldEnum = {
 
 exports.Prisma.CityScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   name: 'name',
   provinceId: 'provinceId'
 };
@@ -283,7 +282,6 @@ exports.Prisma.ProvinceOrderByRelevanceFieldEnum = {
 };
 
 exports.Prisma.CityOrderByRelevanceFieldEnum = {
-  code: 'code',
   name: 'name'
 };
 

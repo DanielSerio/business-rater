@@ -20,6 +20,9 @@ import { getGridProfile } from "./utilities/get-grid-profile";
 import { DataTableSkeletonRows } from "./DataTableSkeletonRows";
 import { useEntityCreate } from "../DataTableCreateModal/hooks/useEntityCreate";
 import { DataTableCreateModal } from "../DataTableCreateModal/DataTableCreateModal";
+import { DataTableRow } from "./DataTableRow";
+import { DataTableCol } from "./DataTableCol";
+import type { ReactNode } from "react";
 
 /**
  * Convenience function to get the column list. Without this,
@@ -111,7 +114,6 @@ export function DataTable<Name extends AdminTabName>({
             onCreateClick={() => openModal(entity)}
           />
           <ScrollArea h="100%">
-            {query.fetchStatus}
             {query.isLoading && (
               <DataTableSkeletonRows
                 limit={limit}
@@ -120,6 +122,24 @@ export function DataTable<Name extends AdminTabName>({
               />
             )}
             {!query.isLoading && !query.data?.length && <Text>No Records</Text>}
+            {!query.isLoading &&
+              (query.data?.length ?? 0) > 0 &&
+              table.getCoreRowModel().flatRows.map((row) => {
+                return (
+                  <DataTableRow gridProfile={gridProfile} key={row.id}>
+                    {row.getVisibleCells().map((col) => {
+                      return (
+                        <DataTableCol
+                          name={col.column.columnDef.header?.toString()}
+                          key={col.id}
+                        >
+                          {col.renderValue() as ReactNode}
+                        </DataTableCol>
+                      );
+                    })}
+                  </DataTableRow>
+                );
+              })}
           </ScrollArea>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { CreateBusinessForm } from "./forms/CreateBusinessForm";
 import { CreateCityForm } from "./forms/CreateCityForm";
 import { CreateCountryForm } from "./forms/CreateCountryForm";
 import { CreateStateForm } from "./forms/CreateStateForm";
+import { useApiClient } from "../../../Core/hooks/useApiClient";
 
 /**
  * HOF that acts as a "form router" for the create modal.
@@ -15,15 +16,17 @@ export function DataTableCreateForm({
   contextName: AdminTabName;
   closeModal: () => void;
 }) {
+  const http = useApiClient();
+
   switch (contextName) {
     case "businesses":
-      return <CreateBusinessForm closeModal={closeModal} />;
+      return <CreateBusinessForm http={http} closeModal={closeModal} />;
     case "cities":
-      return <CreateCityForm closeModal={closeModal} />;
+      return <CreateCityForm http={http} closeModal={closeModal} />;
     case "countries":
-      return <CreateCountryForm closeModal={closeModal} />;
+      return <CreateCountryForm http={http} closeModal={closeModal} />;
     case "states":
-      return <CreateStateForm closeModal={closeModal} />;
+      return <CreateStateForm http={http} closeModal={closeModal} />;
     default:
       return <>An error occurred</>;
   }

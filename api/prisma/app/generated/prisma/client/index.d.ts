@@ -9175,21 +9175,18 @@ export namespace Prisma {
 
   export type CityMinAggregateOutputType = {
     id: number | null
-    code: string | null
     name: string | null
     provinceId: number | null
   }
 
   export type CityMaxAggregateOutputType = {
     id: number | null
-    code: string | null
     name: string | null
     provinceId: number | null
   }
 
   export type CityCountAggregateOutputType = {
     id: number
-    code: number
     name: number
     provinceId: number
     _all: number
@@ -9208,21 +9205,18 @@ export namespace Prisma {
 
   export type CityMinAggregateInputType = {
     id?: true
-    code?: true
     name?: true
     provinceId?: true
   }
 
   export type CityMaxAggregateInputType = {
     id?: true
-    code?: true
     name?: true
     provinceId?: true
   }
 
   export type CityCountAggregateInputType = {
     id?: true
-    code?: true
     name?: true
     provinceId?: true
     _all?: true
@@ -9316,7 +9310,6 @@ export namespace Prisma {
 
   export type CityGroupByOutputType = {
     id: number
-    code: string
     name: string
     provinceId: number
     _count: CityCountAggregateOutputType | null
@@ -9342,7 +9335,6 @@ export namespace Prisma {
 
   export type CitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    code?: boolean
     name?: boolean
     provinceId?: boolean
     Province?: boolean | ProvinceDefaultArgs<ExtArgs>
@@ -9355,12 +9347,11 @@ export namespace Prisma {
 
   export type CitySelectScalar = {
     id?: boolean
-    code?: boolean
     name?: boolean
     provinceId?: boolean
   }
 
-  export type CityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "provinceId", ExtArgs["result"]["city"]>
+  export type CityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "provinceId", ExtArgs["result"]["city"]>
   export type CityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Province?: boolean | ProvinceDefaultArgs<ExtArgs>
     Businesses?: boolean | City$BusinessesArgs<ExtArgs>
@@ -9377,7 +9368,6 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      code: string
       name: string
       provinceId: number
     }, ExtArgs["result"]["city"]>
@@ -9753,7 +9743,6 @@ export namespace Prisma {
    */
   interface CityFieldRefs {
     readonly id: FieldRef<"City", 'Int'>
-    readonly code: FieldRef<"City", 'String'>
     readonly name: FieldRef<"City", 'String'>
     readonly provinceId: FieldRef<"City", 'Int'>
   }
@@ -16405,7 +16394,6 @@ export namespace Prisma {
 
   export const CityScalarFieldEnum: {
     id: 'id',
-    code: 'code',
     name: 'name',
     provinceId: 'provinceId'
   };
@@ -16563,7 +16551,6 @@ export namespace Prisma {
 
 
   export const CityOrderByRelevanceFieldEnum: {
-    code: 'code',
     name: 'name'
   };
 
@@ -17075,7 +17062,6 @@ export namespace Prisma {
     OR?: CityWhereInput[]
     NOT?: CityWhereInput | CityWhereInput[]
     id?: IntFilter<"City"> | number
-    code?: StringFilter<"City"> | string
     name?: StringFilter<"City"> | string
     provinceId?: IntFilter<"City"> | number
     Province?: XOR<ProvinceScalarRelationFilter, ProvinceWhereInput>
@@ -17085,7 +17071,6 @@ export namespace Prisma {
 
   export type CityOrderByWithRelationInput = {
     id?: SortOrder
-    code?: SortOrder
     name?: SortOrder
     provinceId?: SortOrder
     Province?: ProvinceOrderByWithRelationInput
@@ -17096,7 +17081,6 @@ export namespace Prisma {
 
   export type CityWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    code?: string
     name?: string
     AND?: CityWhereInput | CityWhereInput[]
     OR?: CityWhereInput[]
@@ -17105,11 +17089,10 @@ export namespace Prisma {
     Province?: XOR<ProvinceScalarRelationFilter, ProvinceWhereInput>
     Businesses?: BusinessListRelationFilter
     Address?: AddressListRelationFilter
-  }, "id" | "code" | "name">
+  }, "id" | "name">
 
   export type CityOrderByWithAggregationInput = {
     id?: SortOrder
-    code?: SortOrder
     name?: SortOrder
     provinceId?: SortOrder
     _count?: CityCountOrderByAggregateInput
@@ -17124,7 +17107,6 @@ export namespace Prisma {
     OR?: CityScalarWhereWithAggregatesInput[]
     NOT?: CityScalarWhereWithAggregatesInput | CityScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"City"> | number
-    code?: StringWithAggregatesFilter<"City"> | string
     name?: StringWithAggregatesFilter<"City"> | string
     provinceId?: IntWithAggregatesFilter<"City"> | number
   }
@@ -17927,7 +17909,6 @@ export namespace Prisma {
   }
 
   export type CityCreateInput = {
-    code: string
     name: string
     Province: ProvinceCreateNestedOneWithoutCitiesInput
     Businesses?: BusinessCreateNestedManyWithoutCityInput
@@ -17936,7 +17917,6 @@ export namespace Prisma {
 
   export type CityUncheckedCreateInput = {
     id?: number
-    code: string
     name: string
     provinceId: number
     Businesses?: BusinessUncheckedCreateNestedManyWithoutCityInput
@@ -17944,7 +17924,6 @@ export namespace Prisma {
   }
 
   export type CityUpdateInput = {
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     Province?: ProvinceUpdateOneRequiredWithoutCitiesNestedInput
     Businesses?: BusinessUpdateManyWithoutCityNestedInput
@@ -17953,7 +17932,6 @@ export namespace Prisma {
 
   export type CityUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     provinceId?: IntFieldUpdateOperationsInput | number
     Businesses?: BusinessUncheckedUpdateManyWithoutCityNestedInput
@@ -17962,19 +17940,16 @@ export namespace Prisma {
 
   export type CityCreateManyInput = {
     id?: number
-    code: string
     name: string
     provinceId: number
   }
 
   export type CityUpdateManyMutationInput = {
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
   export type CityUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     provinceId?: IntFieldUpdateOperationsInput | number
   }
@@ -18979,7 +18954,6 @@ export namespace Prisma {
 
   export type CityCountOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     name?: SortOrder
     provinceId?: SortOrder
   }
@@ -18991,14 +18965,12 @@ export namespace Prisma {
 
   export type CityMaxOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     name?: SortOrder
     provinceId?: SortOrder
   }
 
   export type CityMinOrderByAggregateInput = {
     id?: SortOrder
-    code?: SortOrder
     name?: SortOrder
     provinceId?: SortOrder
   }
@@ -21266,7 +21238,6 @@ export namespace Prisma {
   }
 
   export type CityCreateWithoutProvinceInput = {
-    code: string
     name: string
     Businesses?: BusinessCreateNestedManyWithoutCityInput
     Address?: AddressCreateNestedManyWithoutCityInput
@@ -21274,7 +21245,6 @@ export namespace Prisma {
 
   export type CityUncheckedCreateWithoutProvinceInput = {
     id?: number
-    code: string
     name: string
     Businesses?: BusinessUncheckedCreateNestedManyWithoutCityInput
     Address?: AddressUncheckedCreateNestedManyWithoutCityInput
@@ -21333,7 +21303,6 @@ export namespace Prisma {
     OR?: CityScalarWhereInput[]
     NOT?: CityScalarWhereInput | CityScalarWhereInput[]
     id?: IntFilter<"City"> | number
-    code?: StringFilter<"City"> | string
     name?: StringFilter<"City"> | string
     provinceId?: IntFilter<"City"> | number
   }
@@ -21500,7 +21469,6 @@ export namespace Prisma {
   }
 
   export type CityCreateWithoutBusinessesInput = {
-    code: string
     name: string
     Province: ProvinceCreateNestedOneWithoutCitiesInput
     Address?: AddressCreateNestedManyWithoutCityInput
@@ -21508,7 +21476,6 @@ export namespace Prisma {
 
   export type CityUncheckedCreateWithoutBusinessesInput = {
     id?: number
-    code: string
     name: string
     provinceId: number
     Address?: AddressUncheckedCreateNestedManyWithoutCityInput
@@ -21646,7 +21613,6 @@ export namespace Prisma {
   }
 
   export type CityUpdateWithoutBusinessesInput = {
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     Province?: ProvinceUpdateOneRequiredWithoutCitiesNestedInput
     Address?: AddressUpdateManyWithoutCityNestedInput
@@ -21654,7 +21620,6 @@ export namespace Prisma {
 
   export type CityUncheckedUpdateWithoutBusinessesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     provinceId?: IntFieldUpdateOperationsInput | number
     Address?: AddressUncheckedUpdateManyWithoutCityNestedInput
@@ -22196,7 +22161,6 @@ export namespace Prisma {
   }
 
   export type CityCreateWithoutAddressInput = {
-    code: string
     name: string
     Province: ProvinceCreateNestedOneWithoutCitiesInput
     Businesses?: BusinessCreateNestedManyWithoutCityInput
@@ -22204,7 +22168,6 @@ export namespace Prisma {
 
   export type CityUncheckedCreateWithoutAddressInput = {
     id?: number
-    code: string
     name: string
     provinceId: number
     Businesses?: BusinessUncheckedCreateNestedManyWithoutCityInput
@@ -22240,7 +22203,6 @@ export namespace Prisma {
   }
 
   export type CityUpdateWithoutAddressInput = {
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     Province?: ProvinceUpdateOneRequiredWithoutCitiesNestedInput
     Businesses?: BusinessUpdateManyWithoutCityNestedInput
@@ -22248,7 +22210,6 @@ export namespace Prisma {
 
   export type CityUncheckedUpdateWithoutAddressInput = {
     id?: IntFieldUpdateOperationsInput | number
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     provinceId?: IntFieldUpdateOperationsInput | number
     Businesses?: BusinessUncheckedUpdateManyWithoutCityNestedInput
@@ -22647,12 +22608,10 @@ export namespace Prisma {
 
   export type CityCreateManyProvinceInput = {
     id?: number
-    code: string
     name: string
   }
 
   export type CityUpdateWithoutProvinceInput = {
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     Businesses?: BusinessUpdateManyWithoutCityNestedInput
     Address?: AddressUpdateManyWithoutCityNestedInput
@@ -22660,7 +22619,6 @@ export namespace Prisma {
 
   export type CityUncheckedUpdateWithoutProvinceInput = {
     id?: IntFieldUpdateOperationsInput | number
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     Businesses?: BusinessUncheckedUpdateManyWithoutCityNestedInput
     Address?: AddressUncheckedUpdateManyWithoutCityNestedInput
@@ -22668,7 +22626,6 @@ export namespace Prisma {
 
   export type CityUncheckedUpdateManyWithoutProvinceInput = {
     id?: IntFieldUpdateOperationsInput | number
-    code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
   }
 
