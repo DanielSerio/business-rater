@@ -23,7 +23,7 @@ export function useEntityCreate<Name extends AdminTabName>() {
   return [
     {
       contextName,
-      modalIsOpen,
+      modalIsOpen: modalIsOpen && !!contextName,
     },
     {
       openModal,
