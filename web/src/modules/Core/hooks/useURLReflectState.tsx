@@ -51,6 +51,7 @@ export function useUrlReflectState<State extends RawObject>(
   const serial = JSON.stringify(state);
 
   useEffect(() => {
+    console.info("resolvedLocationChnaged");
     const siteUrl = routerState.resolvedLocation?.href;
     let nextUrl: string | null = siteUrl ?? null;
 

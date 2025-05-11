@@ -4,14 +4,13 @@ import {
   Group,
   Menu,
   Text,
-  TextInput,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { HeaderToolbar } from "./HeaderToolbar";
 import { useAuth } from "../../../hooks/useAuth";
 import { useProfileImg } from "../../../hooks/useProfileImg";
 import { AvatarImg } from "../../user/AvatarImg";
 import {
-  TbContract,
   TbContrast,
   TbDashboard,
   TbLogout,
@@ -24,6 +23,7 @@ export function ProtectedHeader() {
   const auth = useAuth()!;
   const img = useProfileImg(auth?.img);
   const navigate = useNavigate();
+  const { toggleColorScheme } = useMantineColorScheme();
 
   return (
     <AppShellHeader h={60}>
@@ -42,7 +42,10 @@ export function ProtectedHeader() {
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Divider></Menu.Divider>
-              <Menu.Item rightSection={<TbDashboard />}>
+              <Menu.Item
+                rightSection={<TbDashboard />}
+                onClick={() => navigate({ to: "/dashboard" })}
+              >
                 <Text>Dashboard</Text>
               </Menu.Item>
               {auth.rol === "ADMIN" && (
@@ -58,7 +61,11 @@ export function ProtectedHeader() {
                   <Menu.Divider></Menu.Divider>
                 </>
               )}
-              <Menu.Item variant="subtle" rightSection={<TbContrast />}>
+              <Menu.Item
+                variant="subtle"
+                rightSection={<TbContrast />}
+                onClick={toggleColorScheme}
+              >
                 <Text>Theme Mode</Text>
               </Menu.Item>
               <Menu.Divider></Menu.Divider>
