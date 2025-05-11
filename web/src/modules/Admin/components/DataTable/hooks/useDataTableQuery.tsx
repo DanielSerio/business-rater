@@ -7,8 +7,10 @@ import {
 import type { AdminTabName } from "../../../../../pages/admin/AdminDashboardPage";
 import { useDebouncedState } from "@mantine/hooks";
 import type { AxiosInstance } from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import type { DataTableEntity } from "../types";
+import type { EntityListResponse } from "../../../../../types/entity-list.types";
 
 /**
  * Returns a number based on the input value or a fallback value if the input is not a valid number.
@@ -136,49 +138,58 @@ export function useDataTableQuery<Name extends AdminTabName>({
     [_setFilterText, _setFilterQueryText]
   );
 
-  const query = useQuery({
-    enabled: !!filterQueryText,
-    queryKey: [
-      entity,
-      "list",
-      `query=${filterQueryText}`,
-      `limit=${limit}`,
-      `offset=${offset}`,
-      `sort=${encodeURIComponent(JSON.stringify(sorting))}`,
-      `filter=${encodeURIComponent(JSON.stringify(columnFilters))}`,
-    ],
-    async queryFn() {
-      function constructUrl() {
-        const chunks = [`/${entity}?limit=${limit}&offset=${offset}`];
+  const queryFn = async () => {
+    const constructUrl = () => {
+      const chunks = [`/${entity}?limit=${limit}&offset=${offset}`];
 
-        if (sorting && sorting.length) {
-          chunks.push(`sort=${encodeURIComponent(JSON.stringify(sorting))}`);
-        }
-        if (columnFilters && columnFilters.length) {
-          chunks.push(
-            `filter=${encodeURIComponent(JSON.stringify(columnFilters))}`
-          );
-        }
-        if (filterQueryText && filterQueryText.length) {
-          chunks.push(`query=${encodeURIComponent(filterQueryText)}`);
-        }
-
-        return chunks.join("&");
+      if (sorting && sorting.length) {
+        chunks.push(`sort=${encodeURIComponent(JSON.stringify(sorting))}`);
+      }
+      if (columnFilters && columnFilters.length) {
+        chunks.push(
+          `filter=${encodeURIComponent(JSON.stringify(columnFilters))}`
+        );
+      }
+      if (filterQueryText && filterQueryText.length) {
+        chunks.push(`query=${encodeURIComponent(filterQueryText)}`);
       }
 
+      return chunks.join("&");
+    };
+
+    try {
       const response = await http.get(constructUrl());
-      const body = await response.data;
-      const totalRecords = body.total.records;
+
+      console.warn(`RESPONSE: ${constructUrl()}`, response);
+      const body = (await response.data) as EntityListResponse<
+        DataTableEntity<Name>
+      >;
+      console.warn(`DATA: ${constructUrl()}`, body);
+      const totalRecords = body.paging.totals.records;
 
       setTotal(totalRecords);
 
       return body.records;
-    },
-  });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return [
     {
-      query,
+      query: useQuery({
+        enabled: !!entity && !!http,
+        queryKey: [
+          entity,
+          "list",
+          `query=${filterQueryText}`,
+          `limit=${limit}`,
+          `offset=${offset}`,
+          `sort=${encodeURIComponent(JSON.stringify(sorting))}`,
+          `filter=${encodeURIComponent(JSON.stringify(columnFilters))}`,
+        ],
+        queryFn: !!http ? queryFn : skipToken,
+      }),
       filterText,
       total,
       limit,

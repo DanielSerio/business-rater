@@ -9,13 +9,13 @@ import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 
 function AppProviders({ children }: PropsWithChildren) {
   return (
-    <ApiClientProvider>
-      <MantineProvider theme={THEME} defaultColorScheme="dark">
-        <QueryClientProvider client={QUERY_CLIENT}>
+    <QueryClientProvider client={QUERY_CLIENT}>
+      <ApiClientProvider>
+        <MantineProvider theme={THEME} defaultColorScheme="dark">
           <AuthProvider>{children}</AuthProvider>
-        </QueryClientProvider>
-      </MantineProvider>
-    </ApiClientProvider>
+        </MantineProvider>
+      </ApiClientProvider>
+    </QueryClientProvider>
   );
 }
 

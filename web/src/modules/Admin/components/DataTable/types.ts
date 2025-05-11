@@ -3,8 +3,6 @@ import type { AdminTabName } from "../../../../pages/admin/AdminDashboardPage";
 import type { Business } from "../../../../types/business.types";
 import type { City, Country, Province } from "../../../../types/location.types";
 import type { ColumnFiltersState } from "@tanstack/react-table";
-import type { MantineSize } from "@mantine/core";
-
 
 export type DataTableEntityMap = {
   businesses: Business;

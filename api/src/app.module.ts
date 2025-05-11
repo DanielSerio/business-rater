@@ -22,7 +22,6 @@ import { CountriesModule } from './countries/countries.module';
     AuthModule,
     BusinessesModule,
     CountriesModule,
-
   ],
   controllers: [AppController],
   providers: [

@@ -3,7 +3,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table";
-import { Box, ScrollArea, Skeleton } from "@mantine/core";
+import { ScrollArea, Text } from "@mantine/core";
 import type { AdminTabName } from "../../../../pages/admin/AdminDashboardPage";
 import { useUrlReflectState } from "../../../Core/hooks/useURLReflectState";
 import {
@@ -17,8 +17,6 @@ import { useApiClient } from "../../../Core/hooks/useApiClient";
 import { DataTableHeader } from "./DataTableHeader";
 import { useDataTableQuery } from "./hooks/useDataTableQuery";
 import { getGridProfile } from "./utilities/get-grid-profile";
-import { DataTableRow } from "./DataTableRow";
-import { DataTableCol } from "./DataTableCol";
 import { DataTableSkeletonRows } from "./DataTableSkeletonRows";
 
 /**
@@ -96,10 +94,6 @@ export function DataTable<Name extends AdminTabName>({
     [entity, limit, offset]
   );
 
-  console.info({
-    data: query.data,
-  });
-
   return (
     <div className={`data-table ${entity}`}>
       <div className="inner">
@@ -110,6 +104,7 @@ export function DataTable<Name extends AdminTabName>({
           gridProfile={gridProfile}
         />
         <ScrollArea h="100%">
+          {query.fetchStatus}
           {query.isLoading && (
             <DataTableSkeletonRows
               limit={limit}
@@ -117,6 +112,7 @@ export function DataTable<Name extends AdminTabName>({
               gridProfile={gridProfile}
             />
           )}
+          {!query.isLoading && !query.data?.length && <Text>No Records</Text>}
         </ScrollArea>
       </div>
     </div>

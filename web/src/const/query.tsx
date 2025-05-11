@@ -5,10 +5,12 @@ function initQueryClient() {
   const QUERY_CLIENT = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: Infinity,
+        structuralSharing: false,
       },
     },
   });
+
+  QUERY_CLIENT.resetQueries();
 
   return {
     QUERY_CLIENT,
@@ -24,6 +26,7 @@ function create() {
       "X-Authorization": "",
       "X-Refresh": "",
     },
+    timeout: 3000,
   });
 
   type InterceptorParams = Parameters<AxiosInterceptorManager<any>["use"]>;
@@ -47,7 +50,7 @@ function create() {
     return Promise.reject(error);
   };
 
-  const { promise, resolve, reject } = Promise.withResolvers();
+  const { resolve, reject } = Promise.withResolvers();
 
   const onNewResponse = async (response: AxiosResponse) => {
     const headers = await response.headers;
@@ -71,11 +74,9 @@ function create() {
       reject(`Refresh token rejected: ${response.data?.message ?? ""}`);
     }
 
-    return await promise.then((res) => {
-      response.data = res;
-      resolve(response);
-      return response;
-    });
+    resolve(response.data);
+
+    return response;
   };
 
   const onNewResponseError: ErrorInterceptor = async (error) => {
