@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { BusinessesModule } from './businesses/businesses.module';
 import { RefreshGuard } from './auth/guards/refresh.guard';
+import { CountriesModule } from './countries/countries.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { RefreshGuard } from './auth/guards/refresh.guard';
     }),
     AuthModule,
     BusinessesModule,
+    CountriesModule,
 
   ],
   controllers: [AppController],
