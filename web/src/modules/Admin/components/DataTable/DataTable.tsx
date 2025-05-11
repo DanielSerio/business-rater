@@ -18,6 +18,8 @@ import { DataTableHeader } from "./DataTableHeader";
 import { useDataTableQuery } from "./hooks/useDataTableQuery";
 import { getGridProfile } from "./utilities/get-grid-profile";
 import { DataTableSkeletonRows } from "./DataTableSkeletonRows";
+import { useEntityCreate } from "../DataTableCreateModal/hooks/useEntityCreate";
+import { DataTableCreateModal } from "../DataTableCreateModal/DataTableCreateModal";
 
 /**
  * Convenience function to get the column list. Without this,
@@ -94,31 +96,33 @@ export function DataTable<Name extends AdminTabName>({
     [entity, limit, offset]
   );
 
+  const [{ contextName }, { openModal, closeModal }] = useEntityCreate<Name>();
+
   return (
-    <div className={`data-table ${entity}`}>
-      <div className="inner">
-        <DataTableHeader
-          name={entity}
-          table={table}
-          controller={tableQueryController}
-          gridProfile={gridProfile}
-          onCreateClick={() => {
-            //TODO: launch modal
-            alert();
-          }}
-        />
-        <ScrollArea h="100%">
-          {query.fetchStatus}
-          {query.isLoading && (
-            <DataTableSkeletonRows
-              limit={limit}
-              columns={columns}
-              gridProfile={gridProfile}
-            />
-          )}
-          {!query.isLoading && !query.data?.length && <Text>No Records</Text>}
-        </ScrollArea>
+    <>
+      <DataTableCreateModal contextName={contextName} closeModal={closeModal} />
+      <div className={`data-table ${entity}`}>
+        <div className="inner">
+          <DataTableHeader
+            name={entity}
+            table={table}
+            controller={tableQueryController}
+            gridProfile={gridProfile}
+            onCreateClick={() => openModal(entity)}
+          />
+          <ScrollArea h="100%">
+            {query.fetchStatus}
+            {query.isLoading && (
+              <DataTableSkeletonRows
+                limit={limit}
+                columns={columns}
+                gridProfile={gridProfile}
+              />
+            )}
+            {!query.isLoading && !query.data?.length && <Text>No Records</Text>}
+          </ScrollArea>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
