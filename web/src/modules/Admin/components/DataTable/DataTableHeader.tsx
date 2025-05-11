@@ -11,10 +11,12 @@ import { DataTableSearch } from "./DataTableSearch";
 import { DataTablePerPage } from "./DataTablePerPage";
 
 export function DataTableHeader<Name extends AdminTabName>({
+  name,
   table,
   gridProfile,
   controller,
 }: {
+  name: Name;
   gridProfile: string;
   table: ReturnType<typeof useReactTable<DataTableEntity<Name>>>;
   controller: ReturnType<typeof useDataTableQuery<Name>>;
@@ -29,6 +31,7 @@ export function DataTableHeader<Name extends AdminTabName>({
     <Flex className="data-table-header" direction="column">
       <Flex justify="space-between" p="sm" gap="md">
         <DataTableSearch
+          placeholder={`Search ${name}`}
           value={state.filterText}
           onChange={(ev) => methods.setFilterText(ev.target.value)}
         />

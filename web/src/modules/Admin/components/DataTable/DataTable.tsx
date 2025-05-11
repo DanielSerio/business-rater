@@ -99,6 +99,7 @@ export function DataTable<Name extends AdminTabName>({
     <div className={`data-table ${entity}`}>
       <div className="inner">
         <DataTableHeader
+          name={entity}
           table={table}
           controller={tableQueryController}
           gridProfile={gridProfile}
