@@ -19,6 +19,7 @@ import { useDataTableQuery } from "./hooks/useDataTableQuery";
 import { getGridProfile } from "./utilities/get-grid-profile";
 import { DataTableRow } from "./DataTableRow";
 import { DataTableCol } from "./DataTableCol";
+import { DataTableSkeletonRows } from "./DataTableSkeletonRows";
 
 /**
  * Convenience function to get the column list. Without this,
@@ -95,6 +96,10 @@ export function DataTable<Name extends AdminTabName>({
     [entity, limit, offset]
   );
 
+  console.info({
+    data: query.data,
+  });
+
   return (
     <div className={`data-table ${entity}`}>
       <div className="inner">
@@ -105,20 +110,13 @@ export function DataTable<Name extends AdminTabName>({
           gridProfile={gridProfile}
         />
         <ScrollArea h="100%">
-          {[...new Array(limit)].map((_, rowIndex) => (
-            <DataTableRow gridProfile={gridProfile} key={`r-${rowIndex}`}>
-              {columns.map(({ id, header }, index) => (
-                <DataTableCol
-                  key={id ?? `c-${index}`}
-                  name={header?.toString() ?? ""}
-                >
-                  <Box p="xs">
-                    <Skeleton w="100%" h={12} />
-                  </Box>
-                </DataTableCol>
-              ))}
-            </DataTableRow>
-          ))}
+          {query.isLoading && (
+            <DataTableSkeletonRows
+              limit={limit}
+              columns={columns}
+              gridProfile={gridProfile}
+            />
+          )}
         </ScrollArea>
       </div>
     </div>
