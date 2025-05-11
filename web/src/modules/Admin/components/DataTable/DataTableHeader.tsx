@@ -2,25 +2,30 @@ import { flexRender, useReactTable } from "@tanstack/react-table";
 import type { useDataTableQuery } from "./hooks/useDataTableQuery";
 import type { AdminTabName } from "../../../../pages/admin/AdminDashboardPage";
 import type { DataTableEntity } from "./types";
-import { Box, Flex, Group } from "@mantine/core";
+import { Box, Button, Flex, Group } from "@mantine/core";
 import { DataTableRow } from "./DataTableRow";
 import { DataTableCol } from "./DataTableCol";
 import { DataTableColumnFilters } from "./DataTableColumnFilters";
 import { DataTablePagination } from "./DataTablePagination";
 import { DataTableSearch } from "./DataTableSearch";
 import { DataTablePerPage } from "./DataTablePerPage";
+import { TbPlus } from "react-icons/tb";
+
+export interface DataTableHeaderProps<Name extends AdminTabName> {
+  name: Name;
+  gridProfile: string;
+  table: ReturnType<typeof useReactTable<DataTableEntity<Name>>>;
+  controller: ReturnType<typeof useDataTableQuery<Name>>;
+  onCreateClick: () => void;
+}
 
 export function DataTableHeader<Name extends AdminTabName>({
   name,
   table,
   gridProfile,
   controller,
-}: {
-  name: Name;
-  gridProfile: string;
-  table: ReturnType<typeof useReactTable<DataTableEntity<Name>>>;
-  controller: ReturnType<typeof useDataTableQuery<Name>>;
-}) {
+  onCreateClick,
+}: DataTableHeaderProps<Name>) {
   const [state, methods] = controller;
   const filterController = [
     state.columnFilters,
@@ -46,6 +51,14 @@ export function DataTableHeader<Name extends AdminTabName>({
           />
           <DataTablePagination />
           <DataTableColumnFilters controller={filterController} />
+          <Button
+            size="compact-sm"
+            variant="light"
+            px={6}
+            onClick={onCreateClick}
+          >
+            <TbPlus />
+          </Button>
         </Group>
       </Flex>
       <DataTableRow gridProfile={gridProfile}>

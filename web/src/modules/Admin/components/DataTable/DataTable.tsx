@@ -102,6 +102,10 @@ export function DataTable<Name extends AdminTabName>({
           table={table}
           controller={tableQueryController}
           gridProfile={gridProfile}
+          onCreateClick={() => {
+            //TODO: launch modal
+            alert();
+          }}
         />
         <ScrollArea h="100%">
           {query.fetchStatus}
