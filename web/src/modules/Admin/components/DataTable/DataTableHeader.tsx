@@ -2,7 +2,7 @@ import { flexRender, useReactTable } from "@tanstack/react-table";
 import type { useDataTableQuery } from "./hooks/useDataTableQuery";
 import type { AdminTabName } from "../../../../pages/admin/AdminDashboardPage";
 import type { DataTableEntity } from "./types";
-import { Flex, Group } from "@mantine/core";
+import { Box, Flex, Group } from "@mantine/core";
 import { DataTableRow } from "./DataTableRow";
 import { DataTableCol } from "./DataTableCol";
 import { DataTableColumnFilters } from "./DataTableColumnFilters";
@@ -26,7 +26,7 @@ export function DataTableHeader<Name extends AdminTabName>({
   ] as const;
 
   return (
-    <Flex direction="column">
+    <Flex className="data-table-header" direction="column">
       <Flex justify="space-between" p="sm" gap="md">
         <DataTableSearch
           value={state.filterText}
@@ -49,12 +49,14 @@ export function DataTableHeader<Name extends AdminTabName>({
         {table.getFlatHeaders().map((header) => {
           return (
             <DataTableCol key={header.id}>
-              {header.isPlaceholder
-                ? null
-                : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
+              <Box>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+              </Box>
             </DataTableCol>
           );
         })}

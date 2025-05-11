@@ -3,7 +3,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table";
-import { Box, Skeleton } from "@mantine/core";
+import { Box, ScrollArea, Skeleton } from "@mantine/core";
 import type { AdminTabName } from "../../../../pages/admin/AdminDashboardPage";
 import { useUrlReflectState } from "../../../Core/hooks/useURLReflectState";
 import {
@@ -103,17 +103,22 @@ export function DataTable<Name extends AdminTabName>({
           controller={tableQueryController}
           gridProfile={gridProfile}
         />
-        {[...new Array(limit)].map((_, rowIndex) => (
-          <DataTableRow gridProfile={gridProfile} key={`r-${rowIndex}`}>
-            {columns.map(({ id }, index) => (
-              <DataTableCol key={id ?? `c-${index}`}>
-                <Box p="xs">
-                  <Skeleton w="100%" h={12} />
-                </Box>
-              </DataTableCol>
-            ))}
-          </DataTableRow>
-        ))}
+        <ScrollArea h="100%">
+          {[...new Array(limit)].map((_, rowIndex) => (
+            <DataTableRow gridProfile={gridProfile} key={`r-${rowIndex}`}>
+              {columns.map(({ id, header }, index) => (
+                <DataTableCol
+                  key={id ?? `c-${index}`}
+                  name={header?.toString() ?? ""}
+                >
+                  <Box p="xs">
+                    <Skeleton w="100%" h={12} />
+                  </Box>
+                </DataTableCol>
+              ))}
+            </DataTableRow>
+          ))}
+        </ScrollArea>
       </div>
     </div>
   );

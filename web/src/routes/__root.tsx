@@ -13,9 +13,13 @@ export const Route = createRootRoute({
   component: () => {
     const location = useLocation();
     const isPublic = isPublicRoute(location.pathname);
+    const routeClassName = location.pathname.slice(1).replace(/[\/]/g, "-");
 
     return (
-      <AppShell header={{ height: 60 }}>
+      <AppShell
+        className={`shell${routeClassName ? ` ${routeClassName}` : ""}`}
+        header={{ height: 60 }}
+      >
         {!!isPublic ? <PublicHeader /> : <ProtectedHeader />}
         <Outlet />
       </AppShell>

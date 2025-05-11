@@ -1,0 +1,52 @@
+//page
+html:has(.shell.admin),
+body:has(.shell.admin),
+.shell.admin {
+  overflow: hidden;
+}
+
+//table
+.data-table {
+  container-type: size;
+  container-name: datatable;
+
+  & > .inner {
+    position: absolute;
+    width: 100%;
+    height: calc(100svh - 96px);
+    padding-top: 70px;
+  }
+
+  .colname {
+    min-width: 8ch;
+    padding: 0 6px;
+    display: none;
+  }
+}
+
+//queries
+@container datatable (max-width: 640px) {
+  .data-table > .inner {
+    .data-table-header > .data-table-row {
+      display: none;
+    }
+
+    .data-table-row,
+    .data-table-col > .inner {
+      display: flex;
+    }
+
+    .data-table-col > .inner > div:not(.colname) {
+      flex: 1;
+    }
+
+    .data-table-col > .inner > .colname {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .data-table-row {
+      flex-direction: column;
+    }
+  }
+}

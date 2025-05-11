@@ -3,6 +3,7 @@ import type { AdminTabName } from "../../../../pages/admin/AdminDashboardPage";
 import type { Business } from "../../../../types/business.types";
 import type { City, Country, Province } from "../../../../types/location.types";
 import type { ColumnFiltersState } from "@tanstack/react-table";
+import type { MantineSize } from "@mantine/core";
 
 
 export type DataTableEntityMap = {
@@ -27,12 +28,12 @@ export interface DataTableProps<Name extends AdminTabName> {
   searchQuery: DataTableSearchQuery;
 }
 
-
 export interface DataTableRowProps extends AreaHTMLAttributes<HTMLDivElement> {
   gridProfile: string;
 }
 
 export interface DataTableColProps extends AreaHTMLAttributes<HTMLDivElement> {
+  name?: string;
   innerProps?: Omit<DataTableColProps, 'innerProps'> & { ref?: RefObject<HTMLDivElement>; };
 }
 
