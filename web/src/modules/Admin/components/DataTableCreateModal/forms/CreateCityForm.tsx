@@ -4,6 +4,7 @@ import { useForm } from "@mantine/form";
 import { getValidator } from "../utilities/get-validator";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useMutation } from "@tanstack/react-query";
+import { CountrySelect } from "../../../../Core/components/controls/CountrySelect";
 
 const validator = getValidator("cities");
 
@@ -14,7 +15,11 @@ export function CreateCityForm({
 }: DataTableCreateFormBaseProps) {
   const mutation = useMutation({
     mutationKey: ["cities", "create"],
-    async mutationFn(values: { stateId: number; name: string }) {
+    async mutationFn(values: {
+      countryId: number;
+      provinceId: number;
+      name: string;
+    }) {
       const result = await http.post("/cities", values);
 
       return await result.data;
@@ -23,7 +28,8 @@ export function CreateCityForm({
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
-      stateId: -1,
+      countryId: -1,
+      provinceId: -1,
       name: "",
     },
     validate: zodResolver(validator),
@@ -46,14 +52,16 @@ export function CreateCityForm({
     <form onSubmit={handleSubmit}>
       <Flex direction="column">
         <Flex direction="column" gap="sm" mb="lg">
-          <TextInput
-            label="Code"
-            required
-            error={form.errors.code}
-            key={form.key("code")}
-            {...form.getInputProps("code")}
-            onBlur={() => form.validateField("code")}
+          <CountrySelect
+            error={form.errors.countryId}
+            defaultValue={form.getInitialValues().countryId}
+            onValueChange={(newValue) => {
+              form.setFieldValue("countryId", newValue ? newValue.id : -1);
+              form.validateField("countryId");
+            }}
+            onBlur={() => form.validateField("countryId")}
           />
+          {/* TODO: <StateSelect /> */}
           <TextInput
             label="Name"
             required

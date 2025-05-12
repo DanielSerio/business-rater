@@ -70,6 +70,12 @@ export function getValidator<Name extends AdminTabName>(name: Name) {
         name: nameField,
         countryId: z.number().positive("Country is required").int(),
       });
+    } else if (name === "cities") {
+      return z.object({
+        name: nameField,
+        countryId: z.number().positive("Country is required").int(),
+        provinceId: z.number().positive("State/Province is required").int(),
+      });
     }
 
     return z.object({

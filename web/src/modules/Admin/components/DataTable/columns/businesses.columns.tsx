@@ -7,6 +7,6 @@ export const BUSINESSES_COLUMNS = [
   {
     accessorKey: "name",
     header: "Name",
-    size: 180,
+    size: 300,
   },
 ];
