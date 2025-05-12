@@ -4,6 +4,7 @@ import { useForm } from "@mantine/form";
 import { getValidator } from "../utilities/get-validator";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useMutation } from "@tanstack/react-query";
+import { CountrySelect } from "../../../../Core/components/controls/CountrySelect";
 
 const validator = getValidator("states");
 
@@ -37,6 +38,15 @@ export function CreateStateForm({
     <form onSubmit={handleSubmit}>
       <Flex direction="column">
         <Flex direction="column" gap="sm" mb="lg">
+          <CountrySelect
+            error={form.errors.countryId}
+            defaultValue={form.getInitialValues().countryId}
+            onValueChange={(newValue) => {
+              form.setFieldValue("countryId", newValue ? newValue.id : -1);
+              form.validateField("countryId");
+            }}
+            onBlur={() => form.validateField("countryId")}
+          />
           <TextInput
             label="Code"
             required

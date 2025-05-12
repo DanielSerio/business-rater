@@ -68,7 +68,7 @@ export function getValidator<Name extends AdminTabName>(name: Name) {
       return z.object({
         code: codeField,
         name: nameField,
-        countryId: z.number().positive().int(),
+        countryId: z.number().positive("Country is required").int(),
       });
     }
 
