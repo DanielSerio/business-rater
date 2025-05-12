@@ -9,6 +9,7 @@ const validator = getValidator("countries");
 
 export function CreateCountryForm({
   http,
+  queryClient,
   closeModal,
 }: DataTableCreateFormBaseProps) {
   const mutation = useMutation({
@@ -31,6 +32,9 @@ export function CreateCountryForm({
   const handleSubmit = form.onSubmit(async (values) => {
     try {
       await mutation.mutateAsync(values);
+      await queryClient.invalidateQueries({
+        queryKey: ["countries"],
+      });
 
       closeModal();
     } catch (err) {

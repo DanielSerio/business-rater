@@ -9,6 +9,7 @@ const validator = getValidator("cities");
 
 export function CreateCityForm({
   http,
+  queryClient,
   closeModal,
 }: DataTableCreateFormBaseProps) {
   const mutation = useMutation({
@@ -29,7 +30,16 @@ export function CreateCityForm({
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
-    await mutation.mutateAsync(values);
+    try {
+      await mutation.mutateAsync(values);
+      await queryClient.invalidateQueries({
+        queryKey: ["cities"],
+      });
+
+      closeModal();
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   return (

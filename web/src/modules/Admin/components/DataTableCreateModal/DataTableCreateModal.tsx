@@ -5,6 +5,7 @@ import { CreateCityForm } from "./forms/CreateCityForm";
 import { CreateCountryForm } from "./forms/CreateCountryForm";
 import { CreateStateForm } from "./forms/CreateStateForm";
 import { useApiClient } from "../../../Core/hooks/useApiClient";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * HOF that acts as a "form router" for the create modal.
@@ -17,16 +18,41 @@ export function DataTableCreateForm({
   closeModal: () => void;
 }) {
   const http = useApiClient();
+  const queryClient = useQueryClient();
 
   switch (contextName) {
     case "businesses":
-      return <CreateBusinessForm http={http} closeModal={closeModal} />;
+      return (
+        <CreateBusinessForm
+          http={http}
+          queryClient={queryClient}
+          closeModal={closeModal}
+        />
+      );
     case "cities":
-      return <CreateCityForm http={http} closeModal={closeModal} />;
+      return (
+        <CreateCityForm
+          http={http}
+          queryClient={queryClient}
+          closeModal={closeModal}
+        />
+      );
     case "countries":
-      return <CreateCountryForm http={http} closeModal={closeModal} />;
+      return (
+        <CreateCountryForm
+          http={http}
+          queryClient={queryClient}
+          closeModal={closeModal}
+        />
+      );
     case "states":
-      return <CreateStateForm http={http} closeModal={closeModal} />;
+      return (
+        <CreateStateForm
+          http={http}
+          queryClient={queryClient}
+          closeModal={closeModal}
+        />
+      );
     default:
       return <>An error occurred</>;
   }

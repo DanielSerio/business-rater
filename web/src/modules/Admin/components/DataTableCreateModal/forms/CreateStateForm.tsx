@@ -10,6 +10,7 @@ const validator = getValidator("states");
 
 export function CreateStateForm({
   http,
+  queryClient,
   closeModal,
 }: DataTableCreateFormBaseProps) {
   const mutation = useMutation({
@@ -33,6 +34,9 @@ export function CreateStateForm({
   const handleSubmit = form.onSubmit(async (values) => {
     try {
       await mutation.mutateAsync(values);
+      await queryClient.invalidateQueries({
+        queryKey: ["states"],
+      });
 
       closeModal();
     } catch (err) {
