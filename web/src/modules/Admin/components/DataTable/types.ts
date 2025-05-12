@@ -24,6 +24,7 @@ export type DataTableSearchQuery = {
 export interface DataTableProps<Name extends AdminTabName> {
   entity: Name;
   searchQuery: DataTableSearchQuery;
+  dependents?: Partial<Record<AdminTabName, { labelField: string; idField: string; }>>;
 }
 
 export interface DataTableRowProps extends AreaHTMLAttributes<HTMLDivElement> {

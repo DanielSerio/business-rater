@@ -31,7 +31,13 @@ export function CreateStateForm({
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
-    await mutation.mutateAsync(values);
+    try {
+      await mutation.mutateAsync(values);
+
+      closeModal();
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   return (

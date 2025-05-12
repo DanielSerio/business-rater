@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { BusinessesModule } from './businesses/businesses.module';
 import { RefreshGuard } from './auth/guards/refresh.guard';
 import { CountriesModule } from './countries/countries.module';
+import { StatesModule } from './states/states.module';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { CountriesModule } from './countries/countries.module';
     AuthModule,
     BusinessesModule,
     CountriesModule,
+    StatesModule,
   ],
   controllers: [AppController],
   providers: [

@@ -23,6 +23,8 @@ import { DataTableCreateModal } from "../DataTableCreateModal/DataTableCreateMod
 import { DataTableRow } from "./DataTableRow";
 import { DataTableCol } from "./DataTableCol";
 import type { ReactNode } from "react";
+import { useQueries } from "@tanstack/react-query";
+import type { AxiosInstance } from "axios";
 
 /**
  * Convenience function to get the column list. Without this,
@@ -49,9 +51,40 @@ function getDataTableColumns<Name extends AdminTabName>(
 // component scope
 const initialValues: unknown[] = [];
 
+function useDependencyQueries(
+  http: AxiosInstance,
+  dependents?: Partial<
+    Record<AdminTabName, { labelField: string; idField: string }>
+  >
+) {
+  return useQueries({
+    queries: [
+      ...Object.entries(dependents ?? {}).map(([entityName, field]) => {
+        return {
+          queryKey: [entityName, "by", JSON.stringify(field)],
+          staleTime: Infinity,
+          async queryFn() {
+            const response = await http.get(
+              `/${entityName}?limit=${10_000}&offset=0`
+            );
+
+            console.info(response);
+
+            return await response.data.records.map((ent: object) => ({
+              context: entityName,
+              ...ent,
+            }));
+          },
+        };
+      }),
+    ],
+  });
+}
+
 export function DataTable<Name extends AdminTabName>({
   entity,
   searchQuery,
+  dependents,
 }: DataTableProps<Name>) {
   type EntityRecord = DataTableEntity<Name>;
   const http = useApiClient();
@@ -100,6 +133,26 @@ export function DataTable<Name extends AdminTabName>({
   );
 
   const [{ contextName }, { openModal, closeModal }] = useEntityCreate<Name>();
+  const dependencies = useDependencyQueries(http, dependents);
+  const mergedDependencies = dependencies
+    .map((q) => q.data ?? [])
+    .reduce((depsList, deps) => {
+      return depsList.concat(deps);
+    }, []);
+
+  const findDependency = <Name extends AdminTabName>(
+    context: Name,
+    value: unknown
+  ) => {
+    return mergedDependencies.find(
+      (record: {
+        context: Name;
+        id: NonNullable<keyof typeof dependents>[Name]["idField"];
+        code: string;
+        name: string;
+      }) => record.context === context && record.id === value
+    );
+  };
 
   return (
     <>
@@ -128,12 +181,31 @@ export function DataTable<Name extends AdminTabName>({
                 return (
                   <DataTableRow gridProfile={gridProfile} key={row.id}>
                     {row.getVisibleCells().map((col) => {
+                      const dependent = (
+                        col.column.columnDef.meta as Record<string, string>
+                      )?.dependent as AdminTabName;
+                      const labelField =
+                        dependents?.[dependent]?.labelField ?? null;
+
+                      let dependency = null;
+
+                      if (dependent) {
+                        dependency = findDependency(
+                          dependent as AdminTabName,
+                          col.getValue()
+                        );
+                      }
+
                       return (
                         <DataTableCol
                           name={col.column.columnDef.header?.toString()}
                           key={col.id}
                         >
-                          {col.renderValue() as ReactNode}
+                          {dependency && labelField ? (
+                            <>{dependency?.[labelField]}</>
+                          ) : (
+                            (col.renderValue() as ReactNode)
+                          )}
                         </DataTableCol>
                       );
                     })}
