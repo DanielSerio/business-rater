@@ -49,9 +49,18 @@ export function DataTableHeader<Name extends AdminTabName>({
               }
             }}
           />
-          <DataTablePagination />
+          <DataTablePagination
+            limit={state.limit}
+            offset={state.offset}
+            totalPages={Math.ceil(state.total / state.limit)}
+            goToFirstPage={methods.goToFirstPage}
+            goToPrevPage={methods.goToPrevPage}
+            goToNextPage={methods.goToNextPage}
+            goToLastPage={methods.goToLastPage}
+          />
           <DataTableColumnFilters controller={filterController} />
           <Button
+            title="Create"
             size="compact-sm"
             variant="light"
             px={6}

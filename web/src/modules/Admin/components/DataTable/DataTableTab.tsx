@@ -3,19 +3,27 @@ import type { IconBaseProps, IconType } from "react-icons/lib";
 
 export interface DataTableTabProps extends PopoverProps {
   targetIcon: IconType;
+  title: string;
   activeIconProps?: IconBaseProps;
 }
 
 export function DataTableTab({
-  targetIcon,
+  title,
   activeIconProps,
   children,
+  targetIcon,
   ...props
 }: DataTableTabProps) {
   return (
     <Popover {...props}>
       <Popover.Target>
-        <Button variant={"light"} color={"dark"} size="compact-sm" px={5}>
+        <Button
+          title={title}
+          variant={"light"}
+          color={"dark"}
+          size="compact-sm"
+          px={5}
+        >
           {targetIcon({ ...activeIconProps })}
         </Button>
       </Popover.Target>

@@ -8,7 +8,7 @@ export function DataTablePerPage({
   ...props
 }: Omit<DataTablePerPageProps, "data">) {
   return (
-    <DataTableTab targetIcon={FaArrowsUpDown}>
+    <DataTableTab title="Records per page" targetIcon={FaArrowsUpDown}>
       <Select data={["1", "10", "25", "50", "100", "200", "400"]} {...props} />
     </DataTableTab>
   );

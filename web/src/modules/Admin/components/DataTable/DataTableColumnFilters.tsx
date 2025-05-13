@@ -7,5 +7,9 @@ export function DataTableColumnFilters(
     // controller: [filters, setFilters],
   }: DataTableColumnFilterProps
 ) {
-  return <DataTableTab targetIcon={TbFilter}>POPOVER</DataTableTab>;
+  return (
+    <DataTableTab title="Filters" targetIcon={TbFilter}>
+      POPOVER
+    </DataTableTab>
+  );
 }
