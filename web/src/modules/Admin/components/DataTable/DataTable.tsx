@@ -23,8 +23,9 @@ import { DataTableCreateModal } from "../DataTableCreateModal/DataTableCreateMod
 import { DataTableRow } from "./DataTableRow";
 import { DataTableCol } from "./DataTableCol";
 import type { ReactNode } from "react";
-import { useQueries } from "@tanstack/react-query";
-import type { AxiosInstance } from "axios";
+import { DataTableRecordDetailsDrawer } from "./DataTableRecordDetailsDrawer";
+import { useDependencyQueries } from "./hooks/useDependencyQueries";
+import { useSelectedRecord } from "./hooks/useSelectedRecord";
 
 /**
  * Convenience function to get the column list. Without this,
@@ -51,40 +52,11 @@ function getDataTableColumns<Name extends AdminTabName>(
 // component scope
 const initialValues: unknown[] = [];
 
-function useDependencyQueries(
-  http: AxiosInstance,
-  dependents?: Partial<
-    Record<AdminTabName, { labelField: string; idField: string }>
-  >
-) {
-  return useQueries({
-    queries: [
-      ...Object.entries(dependents ?? {}).map(([entityName, field]) => {
-        return {
-          queryKey: [entityName, "by", JSON.stringify(field)],
-          staleTime: Infinity,
-          async queryFn() {
-            const response = await http.get(
-              `/${entityName}?limit=${10_000}&offset=0`
-            );
-
-            console.info(response);
-
-            return await response.data.records.map((ent: object) => ({
-              context: entityName,
-              ...ent,
-            }));
-          },
-        };
-      }),
-    ],
-  });
-}
-
 export function DataTable<Name extends AdminTabName>({
   entity,
   searchQuery,
   dependents,
+  deleteRetypeField,
 }: DataTableProps<Name>) {
   type EntityRecord = DataTableEntity<Name>;
   const http = useApiClient();
@@ -154,9 +126,26 @@ export function DataTable<Name extends AdminTabName>({
     );
   };
 
+  const [{ original, updateForm, deleteForm }, { openRecord, closeRecord }] =
+    useSelectedRecord<Name>({
+      update: {
+        exclude: ["id"],
+      },
+      delete: {
+        retype: deleteRetypeField,
+      },
+    });
+
   return (
     <>
       <DataTableCreateModal contextName={contextName} closeModal={closeModal} />
+      <DataTableRecordDetailsDrawer
+        contextName={contextName}
+        record={original}
+        updateForm={updateForm}
+        deleteForm={deleteForm}
+        onClose={closeRecord}
+      />
       <div className={`data-table ${entity}`}>
         <div className="inner">
           <DataTableHeader

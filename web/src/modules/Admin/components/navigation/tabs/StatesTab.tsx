@@ -6,6 +6,7 @@ export function StatesTab({ searchQuery }: TabComponentProps) {
     <div>
       <DataTable
         entity="states"
+        deleteRetypeField="code"
         searchQuery={searchQuery}
         dependents={{
           countries: { labelField: "code", idField: "countryId" },

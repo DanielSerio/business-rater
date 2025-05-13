@@ -7,7 +7,11 @@ import type { TabComponentProps } from "./types";
 export function BusinessesTab({ searchQuery }: TabComponentProps) {
   return (
     <div>
-      <DataTable entity="businesses" searchQuery={searchQuery} />
+      <DataTable
+        deleteRetypeField="name"
+        entity="businesses"
+        searchQuery={searchQuery}
+      />
     </div>
   );
 }

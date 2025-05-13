@@ -25,6 +25,7 @@ export interface DataTableProps<Name extends AdminTabName> {
   entity: Name;
   searchQuery: DataTableSearchQuery;
   dependents?: Partial<Record<AdminTabName, { labelField: string; idField: string; }>>;
+  deleteRetypeField: keyof DataTableEntity<Name>;
 }
 
 export interface DataTableRowProps extends AreaHTMLAttributes<HTMLDivElement> {

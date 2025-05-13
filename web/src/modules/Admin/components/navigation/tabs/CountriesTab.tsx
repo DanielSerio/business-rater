@@ -4,7 +4,11 @@ import type { TabComponentProps } from "./types";
 export function CountriesTab({ searchQuery }: TabComponentProps) {
   return (
     <div>
-      <DataTable entity="countries" searchQuery={searchQuery} />
+      <DataTable
+        deleteRetypeField="code"
+        entity="countries"
+        searchQuery={searchQuery}
+      />
     </div>
   );
 }
