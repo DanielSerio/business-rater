@@ -1,9 +1,17 @@
 import { forwardRef, type ForwardedRef } from "react";
 import type { DataTableColProps } from "./types";
-import { Box } from "@mantine/core";
+import { Box, noop } from "@mantine/core";
 
 function DataTableColComponent(
-  { innerProps, className, name, children, ...props }: DataTableColProps,
+  {
+    innerProps,
+    className,
+    name,
+    children,
+    isLink,
+    openRecord,
+    ...props
+  }: DataTableColProps,
   ref?: ForwardedRef<HTMLDivElement>
 ) {
   const classNames = `data-table-col${className ? ` ${className}` : ""}`;
@@ -15,7 +23,13 @@ function DataTableColComponent(
     <div className={classNames} {...props} ref={ref}>
       <div className={innerClassNames} ref={innerProps?.ref} {...rest}>
         <Box className="colname">{name}</Box>
-        {children}
+        <Box
+          px="xs"
+          className={isLink ? "pseudo-link" : undefined}
+          onClick={isLink ? openRecord : noop}
+        >
+          {children}
+        </Box>
       </div>
     </div>
   );

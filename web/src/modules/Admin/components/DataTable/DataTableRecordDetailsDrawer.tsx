@@ -16,7 +16,7 @@ export function DataTableRecordDetailsDrawer<Name extends AdminTabName>({
   onClose,
 }: DataTableRecordDetailsDrawerProps<Name>) {
   return (
-    <Drawer opened={!!record} onClose={onClose}>
+    <Drawer position="right" opened={!!record} onClose={onClose}>
       <h1>Drawer</h1>
     </Drawer>
   );

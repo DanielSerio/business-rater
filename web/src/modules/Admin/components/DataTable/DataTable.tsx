@@ -187,6 +187,8 @@ export function DataTable<Name extends AdminTabName>({
 
                       return (
                         <DataTableCol
+                          isLink
+                          openRecord={() => openRecord(row.original)}
                           name={col.column.columnDef.header?.toString()}
                           key={col.id}
                         >

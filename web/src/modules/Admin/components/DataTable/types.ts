@@ -35,6 +35,8 @@ export interface DataTableRowProps extends AreaHTMLAttributes<HTMLDivElement> {
 export interface DataTableColProps extends AreaHTMLAttributes<HTMLDivElement> {
   name?: string;
   innerProps?: Omit<DataTableColProps, 'innerProps'> & { ref?: RefObject<HTMLDivElement>; };
+  isLink?: boolean;
+  openRecord: () => void;
 }
 
 export interface DataTableColumnFilterProps {

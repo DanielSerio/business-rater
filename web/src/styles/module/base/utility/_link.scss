@@ -1,0 +1,8 @@
+.pseudo-link {
+  color: var(--mantine-color-anchor);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
